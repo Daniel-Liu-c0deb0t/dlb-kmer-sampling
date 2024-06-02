@@ -18,37 +18,55 @@ static BYTE2BITS: [u8; 256] = {
 };
 
 pub struct Seeder {
-    k: usize,
-    m1: usize,
-    m2: usize,
+    pub k: usize,
+    pub s: usize,
+    pub t: usize,
+    pub mask: u64,
 }
 
+const MIN_S: usize = 7;
+
 impl Seeder {
-    pub fn new(k: usize, m1: usize, m2: usize) -> Self {
-        assert!(m2 <= m1 && m1 <= k && k < 32);
-        assert!(k % 2 != 0 && m1 % 2 != 0 && m2 % 2 != 0);
-        assert!(m1 <= ((k - m2 + 1) / 2 + m2));
-        Self { k, m1, m2 }
+    pub fn new(k: usize, reciprocal_density: usize) -> Self {
+        assert!(k < 64);
+        assert!(k % 2 != 0);
+
+        let mut t = 0;
+
+        while k + 1 >= MIN_S + (t + 1) * reciprocal_density
+            && (t + 1) * (reciprocal_density - 1) >= t + 2 {
+            t += 1;
+        }
+
+        assert!(t > 0);
+
+        let s = k - t * reciprocal_density + 1;
+        let mut mask = 0u64;
+        let stride = (k - s + 1 - t) / (t + 1);
+
+        for i in 0..t {
+            mask |= 1 << ((i + 1) * stride + i);
+        }
+
+        Self { k, s, t, mask }
     }
 
     pub fn get_seeds(
         &self,
         seq: &[u8],
-        res: &mut Vec<(u64, usize)>,
+        res: &mut Vec<(u128, usize)>,
     ) {
         if seq.len() < self.k {
             return;
         }
 
-        let m1_mask = (1u64 << (self.m1 * 2)) - 1;
-        let m2_mask = (1u64 << (self.m2 * 2)) - 1;
-        let k_mask = (1u64 << (self.k * 2)) - 1;
-        let mid = (self.k - self.m2 + 1) / 2;
-        let mut kmer = 0u64;
+        let s_mask = (1u128 << (self.s * 2)) - 1;
+        let k_mask = (1u128 << (self.k * 2)) - 1;
+        let mut kmer = 0u128;
 
         for &next in &seq[..self.k - 1] {
             unsafe {
-                kmer = (kmer << 2) | (*BYTE2BITS.as_ptr().add(next as usize) as u64);
+                kmer = (kmer << 2) | (*BYTE2BITS.as_ptr().add(next as usize) as u128);
             }
         }
 
@@ -56,43 +74,36 @@ impl Seeder {
             let next = *win.last().unwrap();
 
             unsafe {
-                kmer = ((kmer << 2) & k_mask) | (*BYTE2BITS.as_ptr().add(next as usize) as u64);
+                kmer = ((kmer << 2) & k_mask) | (*BYTE2BITS.as_ptr().add(next as usize) as u128);
             }
 
-            let mut m1_min = (std::u64::MAX, std::u64::MAX);
-            let mut m1_idx = 0;
+            let mut s_min = std::u64::MAX;
+            let mut s_idx = 0;
 
-            for j in 0..=(self.k - self.m1) {
-                let m1_mer = (kmer >> ((self.k - self.m1 - j) * 2)) & m1_mask;
-                let mut m2_mer_hash = std::u64::MAX;
+            for j in 0..=(self.k - self.s) {
+                let s_mer = (kmer >> ((self.k - self.s - j) * 2)) & s_mask;
+                let s_hash = hash(0, s_mer);
 
-                for l in 0..=(self.m1 - self.m2) {
-                    let m2_mer = (m1_mer >> ((self.m1 - self.m2 - l) * 2)) & m2_mask;
-                    m2_mer_hash = m2_mer_hash.min(hash(0, m2_mer));
-                }
-
-                let m1_hash = (m2_mer_hash, hash(1, m1_mer));
-
-                if m1_hash <= m1_min {
-                    m1_min = m1_hash;
-                    m1_idx = j;
+                if s_hash <= s_min {
+                    s_min = s_hash;
+                    s_idx = j;
                 }
             }
 
-            if m1_idx == mid {
+            if (self.mask >> s_idx) & 0b1 > 0 {
                 res.push((kmer, i));
             }
         }
     }
 }
 
-fn hash(seed: u64, kmer: u64) -> u64 {
+fn hash(seed: u64, kmer: u128) -> u64 {
     let mut h = WyHash::with_seed(seed);
     kmer.hash(&mut h);
     h.finish()
 }
 
-pub fn density(seeds: &[(u64, usize)], seq_len: usize, k: usize) -> f64 {
+pub fn density(seeds: &[(u128, usize)], seq_len: usize, k: usize) -> f64 {
     if seq_len < k {
         return 0.0;
     }
@@ -100,7 +111,7 @@ pub fn density(seeds: &[(u64, usize)], seq_len: usize, k: usize) -> f64 {
     (seeds.len() as f64) / ((seq_len - k + 1) as f64)
 }
 
-pub fn distances(seeds: &[(u64, usize)]) -> Vec<(usize, usize)> {
+pub fn distances(seeds: &[(u128, usize)]) -> Vec<(usize, usize)> {
     let mut seeds = seeds.to_owned();
     seeds.sort_unstable_by_key(|(_, i)| *i);
     let mut hist = FxHashMap::default();
