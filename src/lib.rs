@@ -27,16 +27,26 @@ pub struct Seeder {
 const MIN_S: usize = 7;
 
 impl Seeder {
-    pub fn new(k: usize, reciprocal_density: usize) -> Self {
+    pub fn new_distance_lower_bound(k: usize, reciprocal_density: usize) -> Self {
         assert!(k < 64);
         assert!(k % 2 != 0);
 
         let mut t = 0;
+        let mut best_t = 0;
+        let mut best_stride = 0;
 
-        while k + 1 >= MIN_S + (t + 1) * reciprocal_density
-            && (t + 1) * (reciprocal_density - 1) >= t + 2 {
+        while k + 1 >= MIN_S + (t + 1) * reciprocal_density {
             t += 1;
+
+            let curr_stride = (reciprocal_density - 1) * t / (t + 1);
+
+            if t == 1 || curr_stride > best_stride {
+                best_t = t;
+                best_stride = curr_stride;
+            }
         }
+
+        let t = best_t;
 
         assert!(t > 0);
 
@@ -49,6 +59,28 @@ impl Seeder {
         }
 
         Self { k, s, t, mask }
+    }
+
+    pub fn distance_lower_bound(&self) -> usize {
+        (self.k - self.s + 1 - self.t) / (self.t + 1) + 1
+    }
+
+    pub fn new_start(k: usize, reciprocal_density: usize) -> Self {
+        Self {
+            k,
+            s: k - reciprocal_density + 1,
+            t: 0,
+            mask: 0b1,
+        }
+    }
+
+    pub fn new_mid(k: usize, reciprocal_density: usize) -> Self {
+        Self {
+            k,
+            s: k - reciprocal_density + 1,
+            t: 1,
+            mask: 1 << ((reciprocal_density - 1) / 2),
+        }
     }
 
     pub fn get_seeds(
