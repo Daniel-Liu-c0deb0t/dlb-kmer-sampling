@@ -76,17 +76,17 @@ open syncmer scheme.
 To compensate for this and maintain the density $d$, we chose $t$ positions such that if the
 minimum $s$-mer (break ties by choosing the rightmost one) in the current $k$-mer occurs at any of the $t$ positions,
 then we sample the $k$-mer.
-These positions are maximally spaced apart in the $k - s + 1$ $s$-mers.
+These positions are maximally spaced apart in the $(k - s + 1)$ $s$-mers.
 First, compute
 ```math
 \begin{align}
-stride &= \left\lfloor \frac{k - s + 1 - t}{t + 1} \right\rfloor\\
+stride &= \left\lfloor \frac{(k - s + 1) - t}{t + 1} \right\rfloor\\
 &= \left\lfloor \frac{t}{t + 1} \left( \frac{1}{d} - 1 \right) \right\rfloor.
 \end{align}
 ```
 Then, the positions are
 ```math
-\{ (i + 1) * stride + i | i = 0, 1, \ldots, t - 1 \}.
+\{ (i + 1) * stride + i \mid i = 0, 1, \ldots, t - 1 \}.
 ```
 
 To find the optimal value for the parameter $t$, we loop through values of $t$ starting from 1
