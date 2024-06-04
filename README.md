@@ -68,9 +68,9 @@ DLB can be seen as a generalization of Shaw & Yu (2022)'s ideas to parameterized
 ### DLB
 We are given $k$ and density $d$. Define a parameter $t$ which we will show how to set later.
 Then, compute
-$$
+```math
 s = k - t \cdot \frac{1}{d} + 1.
-$$
+```
 Notice that as $t$ increases, $s$ decreases, causing density to decrease by $t$ times for the original
 open syncmer scheme.
 To compensate for this and maintain the density $d$, we chose $t$ positions such that if the
@@ -78,16 +78,16 @@ minimum $s$-mer (break ties by choosing the rightmost one) in the current $k$-me
 then we sample the $k$-mer.
 These positions are maximally spaced apart in the $k - s + 1$ $s$-mers.
 First, compute
-$$
+```math
 \begin{align}
 stride &= \left\lfloor \frac{k - s + 1 - t}{t + 1} \right\rfloor\\
 &= \left\lfloor \frac{t}{t + 1} \left( \frac{1}{d} - 1 \right) \right\rfloor.
 \end{align}
-$$
+```
 Then, the positions are
-$$
+```math
 \{ (i + 1) * stride + i | i = 0, 1, \ldots, t - 1 \}.
-$$
+```
 
 To find the optimal value for the parameter $t$, we loop through values of $t$ starting from 1
 and find the maximum value of $stride$ such that $s \geq 7$ (to ensure that each $s$-mer is likely to be unique).
@@ -95,15 +95,15 @@ Ties are broken by choosing the minimum $t$ to maximize $s$.
 Therefore, $t$ is a function of $k$ and $d$.
 
 The distance lower bound is
-$$
+```math
 stride + 1 = \left\lfloor \frac{t}{t + 1} \left( \frac{1}{d} - 1 \right) \right\rfloor + 1
-$$
+```
 
 As $k$ increases and $d$ is held constant, $t$ can be larger while still giving valid values of $s$.
 Thus,
-$$
+```math
 \lim_{k \to \infty} \left\lfloor \frac{t}{t + 1} \left( \frac{1}{d} - 1 \right) \right\rfloor + 1 = \frac{1}{d}
-$$
+```
 In other words, the distance lower bound reaches the upper bound of $\frac{1}{d}$ as $k \to \infty$.
 Therefore, DLB is optimal for large $k$.
 
