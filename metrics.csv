@@ -1,0 +1,121 @@
+algorithm,k,mut_rate,metric,value
+Open syncmer (Edgar 2021),21,0.01,Conservation,0.818329
+Open syncmer (Edgar 2021),21,0.01,L2,2.22
+Open syncmer (Edgar 2021),21,0.05,Conservation,0.40352
+Open syncmer (Edgar 2021),21,0.05,L2,7.399084335240409
+Open syncmer (Edgar 2021),21,0.1,Conservation,0.151625
+Open syncmer (Edgar 2021),21,0.1,L2,15.470952071543625
+Open syncmer (Edgar 2021),21,0.15,Conservation,0.053391
+Open syncmer (Edgar 2021),21,0.15,L2,28.934031243502865
+Open syncmer (Edgar 2021),31,0.01,Conservation,0.83378
+Open syncmer (Edgar 2021),31,0.01,L2,2.57939954252923
+Open syncmer (Edgar 2021),31,0.05,Conservation,0.316548
+Open syncmer (Edgar 2021),31,0.05,L2,11.296575410273682
+Open syncmer (Edgar 2021),31,0.1,Conservation,0.075162
+Open syncmer (Edgar 2021),31,0.1,L2,28.451649442519145
+Open syncmer (Edgar 2021),31,0.15,Conservation,0.018586
+Open syncmer (Edgar 2021),31,0.15,L2,66.42173141374741
+Open syncmer (Edgar 2021),41,0.01,Conservation,0.817822
+Open syncmer (Edgar 2021),41,0.01,L2,3.150379183526961
+Open syncmer (Edgar 2021),41,0.05,Conservation,0.232574
+Open syncmer (Edgar 2021),41,0.05,L2,16.695030847530653
+Open syncmer (Edgar 2021),41,0.1,Conservation,0.033824
+Open syncmer (Edgar 2021),41,0.1,L2,48.41227623237726
+Open syncmer (Edgar 2021),41,0.15,Conservation,0.008609
+Open syncmer (Edgar 2021),41,0.15,L2,154.08943300564124
+Open syncmer (Edgar 2021),51,0.01,Conservation,0.79654
+Open syncmer (Edgar 2021),51,0.01,L2,3.8944591408820814
+Open syncmer (Edgar 2021),51,0.05,Conservation,0.167331
+Open syncmer (Edgar 2021),51,0.05,L2,23.50534449864541
+Open syncmer (Edgar 2021),51,0.1,Conservation,0.013764
+Open syncmer (Edgar 2021),51,0.1,L2,85.93265802941278
+Open syncmer (Edgar 2021),51,0.15,Conservation,0.006178
+Open syncmer (Edgar 2021),51,0.15,L2,347.1774461885449
+Open syncmer (Edgar 2021),61,0.01,Conservation,0.770865
+Open syncmer (Edgar 2021),61,0.01,L2,4.7376536386696735
+Open syncmer (Edgar 2021),61,0.05,Conservation,0.117159
+Open syncmer (Edgar 2021),61,0.05,L2,32.69429188711693
+Open syncmer (Edgar 2021),61,0.1,Conservation,0.006199
+Open syncmer (Edgar 2021),61,0.1,L2,141.19145505305906
+Open syncmer (Edgar 2021),61,0.15,Conservation,0.005896
+Open syncmer (Edgar 2021),61,0.15,L2,577.6326441814036
+Open syncmer (Shaw & Yu 2022),21,0.01,Conservation,0.872659
+Open syncmer (Shaw & Yu 2022),21,0.01,L2,1.7413692888069434
+Open syncmer (Shaw & Yu 2022),21,0.05,Conservation,0.455533
+Open syncmer (Shaw & Yu 2022),21,0.05,L2,6.579107614258943
+Open syncmer (Shaw & Yu 2022),21,0.1,Conservation,0.172029
+Open syncmer (Shaw & Yu 2022),21,0.1,L2,14.10805957600123
+Open syncmer (Shaw & Yu 2022),21,0.15,Conservation,0.058845
+Open syncmer (Shaw & Yu 2022),21,0.15,L2,27.213641377074108
+Open syncmer (Shaw & Yu 2022),31,0.01,Conservation,0.862673
+Open syncmer (Shaw & Yu 2022),31,0.01,L2,2.1989333777993365
+Open syncmer (Shaw & Yu 2022),31,0.05,Conservation,0.351291
+Open syncmer (Shaw & Yu 2022),31,0.05,L2,10.430366244768205
+Open syncmer (Shaw & Yu 2022),31,0.1,Conservation,0.083259
+Open syncmer (Shaw & Yu 2022),31,0.1,L2,27.101668749359327
+Open syncmer (Shaw & Yu 2022),31,0.15,Conservation,0.020807
+Open syncmer (Shaw & Yu 2022),31,0.15,L2,63.47921618136128
+Open syncmer (Shaw & Yu 2022),41,0.01,Conservation,0.84276
+Open syncmer (Shaw & Yu 2022),41,0.01,L2,2.8019987508919413
+Open syncmer (Shaw & Yu 2022),41,0.05,Conservation,0.256234
+Open syncmer (Shaw & Yu 2022),41,0.05,L2,15.59983935814725
+Open syncmer (Shaw & Yu 2022),41,0.1,Conservation,0.037705
+Open syncmer (Shaw & Yu 2022),41,0.1,L2,46.458064025527364
+Open syncmer (Shaw & Yu 2022),41,0.15,Conservation,0.009079
+Open syncmer (Shaw & Yu 2022),41,0.15,L2,144.37262161157844
+Open syncmer (Shaw & Yu 2022),51,0.01,Conservation,0.818406
+Open syncmer (Shaw & Yu 2022),51,0.01,L2,3.560880228258176
+Open syncmer (Shaw & Yu 2022),51,0.05,Conservation,0.180517
+Open syncmer (Shaw & Yu 2022),51,0.05,L2,22.347339796942276
+Open syncmer (Shaw & Yu 2022),51,0.1,Conservation,0.016668
+Open syncmer (Shaw & Yu 2022),51,0.1,L2,77.5009398781718
+Open syncmer (Shaw & Yu 2022),51,0.15,Conservation,0.006379
+Open syncmer (Shaw & Yu 2022),51,0.15,L2,261.5957082274096
+Open syncmer (Shaw & Yu 2022),61,0.01,Conservation,0.793266
+Open syncmer (Shaw & Yu 2022),61,0.01,L2,4.402821141041276
+Open syncmer (Shaw & Yu 2022),61,0.05,Conservation,0.125024
+Open syncmer (Shaw & Yu 2022),61,0.05,L2,31.58437738819621
+Open syncmer (Shaw & Yu 2022),61,0.1,Conservation,0.006843
+Open syncmer (Shaw & Yu 2022),61,0.1,L2,127.64583721767036
+Open syncmer (Shaw & Yu 2022),61,0.15,Conservation,0.005652
+Open syncmer (Shaw & Yu 2022),61,0.15,L2,542.6463321363187
+DLB (ours),21,0.01,Conservation,0.872659
+DLB (ours),21,0.01,L2,1.7413692888069434
+DLB (ours),21,0.05,Conservation,0.455533
+DLB (ours),21,0.05,L2,6.579107614258943
+DLB (ours),21,0.1,Conservation,0.172029
+DLB (ours),21,0.1,L2,14.10805957600123
+DLB (ours),21,0.15,Conservation,0.058845
+DLB (ours),21,0.15,L2,27.213641377074108
+DLB (ours),31,0.01,Conservation,0.857897
+DLB (ours),31,0.01,L2,2.254936141002667
+DLB (ours),31,0.05,Conservation,0.345053
+DLB (ours),31,0.05,L2,10.509016652379993
+DLB (ours),31,0.1,Conservation,0.083869
+DLB (ours),31,0.1,L2,26.635125736515683
+DLB (ours),31,0.15,Conservation,0.019716
+DLB (ours),31,0.15,L2,65.96633277665207
+DLB (ours),41,0.01,Conservation,0.842851
+DLB (ours),41,0.01,L2,2.7971977048467633
+DLB (ours),41,0.05,Conservation,0.254276
+DLB (ours),41,0.05,L2,15.764821978062422
+DLB (ours),41,0.1,Conservation,0.037187
+DLB (ours),41,0.1,L2,47.156602740231406
+DLB (ours),41,0.15,Conservation,0.009192
+DLB (ours),41,0.15,L2,155.94272311653404
+DLB (ours),51,0.01,Conservation,0.821442
+DLB (ours),51,0.01,L2,3.52518113009814
+DLB (ours),51,0.05,Conservation,0.183718
+DLB (ours),51,0.05,L2,22.127770538398124
+DLB (ours),51,0.1,Conservation,0.015546
+DLB (ours),51,0.1,L2,80.19584671290653
+DLB (ours),51,0.15,Conservation,0.006388
+DLB (ours),51,0.15,L2,346.0766302135988
+DLB (ours),61,0.01,Conservation,0.794071
+DLB (ours),61,0.01,L2,4.362932614652672
+DLB (ours),61,0.05,Conservation,0.126304
+DLB (ours),61,0.05,L2,31.118040828432626
+DLB (ours),61,0.1,Conservation,0.007203
+DLB (ours),61,0.1,L2,127.38271607247194
+DLB (ours),61,0.15,Conservation,0.005901
+DLB (ours),61,0.15,L2,529.6373889077319

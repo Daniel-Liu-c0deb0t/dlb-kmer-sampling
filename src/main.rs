@@ -2,15 +2,27 @@ use simulate_seqs::*;
 
 use dlb_kmer_sampling::*;
 
+use std::fs::File;
+use std::io::{BufWriter, Write};
+
 fn main() {
     let reciprocal_density = 11;
     let ks = [21, 31, 41, 51, 61];
+    let mut_rates = [0.01, 0.05, 0.1, 0.15];
+
+    let mut distances_file = BufWriter::new(File::create("distances.csv").unwrap());
+    let mut metrics_file = BufWriter::new(File::create("metrics.csv").unwrap());
 
     let mut rng = StdRng::seed_from_u64(0);
     let alpha = [b'A', b'C', b'G', b'T'];
-    let seq = rand_str(100000, &alpha, &mut rng);
+    let seq = rand_str(1000000, &alpha, &mut rng);
+    let seqs_mut = mut_rates
+        .iter()
+        .map(|&r| rand_mutate_subs(&seq, ((seq.len() as f64) * r) as usize, &alpha, &mut rng))
+        .collect::<Vec<_>>();
 
-    println!("algorithm,k,distance,count");
+    writeln!(&mut distances_file, "algorithm,k,distance,count").unwrap();
+    writeln!(&mut metrics_file, "algorithm,k,mut_rate,metric,value").unwrap();
 
     for &k in &ks {
         let seeder = Seeder::new_start(k, reciprocal_density);
@@ -28,7 +40,28 @@ fn main() {
         eprintln!();
 
         for (dist, count) in distances {
-            println!("Open syncmer (Edgar 2021),{k},{dist},{count}");
+            writeln!(
+                &mut distances_file,
+                "Open syncmer (Edgar 2021),{k},{dist},{count}"
+            )
+            .unwrap();
+        }
+
+        for (&r, seq_mut) in mut_rates.iter().zip(&seqs_mut) {
+            let mut seeds_mut = Vec::new();
+            seeder.get_seeds(&seq_mut, &mut seeds_mut);
+            let conservation = conservation(&seeds, &seeds_mut, seq.len(), k);
+            let l2 = l2(&seeds, &seeds_mut, seq.len(), k);
+            writeln!(
+                &mut metrics_file,
+                "Open syncmer (Edgar 2021),{k},{r},Conservation,{conservation}"
+            )
+            .unwrap();
+            writeln!(
+                &mut metrics_file,
+                "Open syncmer (Edgar 2021),{k},{r},L2,{l2}"
+            )
+            .unwrap();
         }
     }
 
@@ -48,7 +81,28 @@ fn main() {
         eprintln!();
 
         for (dist, count) in distances {
-            println!("Open syncmer (Shaw & Yu 2022),{k},{dist},{count}");
+            writeln!(
+                &mut distances_file,
+                "Open syncmer (Shaw & Yu 2022),{k},{dist},{count}"
+            )
+            .unwrap();
+        }
+
+        for (&r, seq_mut) in mut_rates.iter().zip(&seqs_mut) {
+            let mut seeds_mut = Vec::new();
+            seeder.get_seeds(&seq_mut, &mut seeds_mut);
+            let conservation = conservation(&seeds, &seeds_mut, seq.len(), k);
+            let l2 = l2(&seeds, &seeds_mut, seq.len(), k);
+            writeln!(
+                &mut metrics_file,
+                "Open syncmer (Shaw & Yu 2022),{k},{r},Conservation,{conservation}"
+            )
+            .unwrap();
+            writeln!(
+                &mut metrics_file,
+                "Open syncmer (Shaw & Yu 2022),{k},{r},L2,{l2}"
+            )
+            .unwrap();
         }
     }
 
@@ -70,7 +124,20 @@ fn main() {
         eprintln!();
 
         for (dist, count) in distances {
-            println!("DLB (ours),{k},{dist},{count}");
+            writeln!(&mut distances_file, "DLB (ours),{k},{dist},{count}").unwrap();
+        }
+
+        for (&r, seq_mut) in mut_rates.iter().zip(&seqs_mut) {
+            let mut seeds_mut = Vec::new();
+            seeder.get_seeds(&seq_mut, &mut seeds_mut);
+            let conservation = conservation(&seeds, &seeds_mut, seq.len(), k);
+            let l2 = l2(&seeds, &seeds_mut, seq.len(), k);
+            writeln!(
+                &mut metrics_file,
+                "DLB (ours),{k},{r},Conservation,{conservation}"
+            )
+            .unwrap();
+            writeln!(&mut metrics_file, "DLB (ours),{k},{r},L2,{l2}").unwrap();
         }
     }
 }

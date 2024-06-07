@@ -52,7 +52,7 @@ checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 [[package]]
 name = "simulate-seqs"
 version = "0.1.0"
-source = "git+https://github.com/Daniel-Liu-c0deb0t/simulate-seqs#1016b77e1d217651bd132885b645ed7aad3e2978"
+source = "git+https://github.com/Daniel-Liu-c0deb0t/simulate-seqs#283c472203919f9aeaec53d20362cabaa5c04a4b"
 dependencies = [
  "rand",
 ]

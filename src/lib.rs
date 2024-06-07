@@ -1,4 +1,4 @@
-use rustc_hash::FxHashMap;
+use rustc_hash::{FxHashMap, FxHashSet};
 
 use wyhash::WyHash;
 
@@ -83,11 +83,7 @@ impl Seeder {
         }
     }
 
-    pub fn get_seeds(
-        &self,
-        seq: &[u8],
-        res: &mut Vec<(u128, usize)>,
-    ) {
+    pub fn get_seeds(&self, seq: &[u8], res: &mut Vec<(u128, usize)>) {
         if seq.len() < self.k {
             return;
         }
@@ -157,4 +153,38 @@ pub fn distances(seeds: &[(u128, usize)]) -> Vec<(usize, usize)> {
     let mut res = hist.into_iter().collect::<Vec<_>>();
     res.sort_unstable();
     res
+}
+
+pub fn conservation(
+    seeds: &[(u128, usize)],
+    seeds_mut: &[(u128, usize)],
+    seq_len: usize,
+    k: usize,
+) -> f64 {
+    let mut res = FxHashSet::default();
+    let a = seeds.iter().clone().collect::<FxHashSet<_>>();
+    let b = seeds_mut.iter().clone().collect::<FxHashSet<_>>();
+
+    for &&(_, i) in a.intersection(&b) {
+        for j in i..i + k {
+            res.insert(j);
+        }
+    }
+
+    (res.len() as f64) / (seq_len as f64)
+}
+
+pub fn l2(seeds: &[(u128, usize)], seeds_mut: &[(u128, usize)], seq_len: usize, k: usize) -> f64 {
+    let a = seeds.iter().clone().collect::<FxHashSet<_>>();
+    let b = seeds_mut.iter().clone().collect::<FxHashSet<_>>();
+    let mut c = a.intersection(&b).map(|&&s| s).collect::<Vec<_>>();
+    c.sort_unstable_by_key(|(_, i)| *i);
+    let mut res = 0.0f64;
+
+    for w in c.windows(2) {
+        let &[(_, i), (_, j)] = w else { unreachable!() };
+        res += (j - i).saturating_sub(k).pow(2) as f64;
+    }
+
+    (res / (seq_len as f64)).sqrt()
 }

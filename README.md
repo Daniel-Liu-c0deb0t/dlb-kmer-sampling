@@ -110,6 +110,7 @@ Therefore, DLB is optimal for large $k$.
 ## How to run
 Install [Rust](https://www.rust-lang.org/tools/install), clone this repo, and then run this code using
 ```bash
-cargo run --release --quiet > results.csv
-python plot.py
+cargo run --release
+python plot_distances.py
+python plot_metrics.py
 ```
