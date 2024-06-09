@@ -90,7 +90,7 @@ Then, the positions are
 ```
 
 To find the optimal value for the parameter $t$, we loop through values of $t$ starting from 1
-and find the maximum value of $stride$ such that $s \geq 7$ (to ensure that each $s$-mer is likely to be unique).
+and find the maximum value of $stride$ such that $s \geq 5$ (to ensure that each $s$-mer is likely to be unique).
 Ties are broken by choosing the minimum $t$ to maximize $s$.
 Therefore, $t$ is a function of $k$ and $d$.
 

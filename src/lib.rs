@@ -24,9 +24,45 @@ pub struct Seeder {
     pub mask: u64,
 }
 
-const MIN_S: usize = 7;
+const MIN_S: usize = 5;
 
 impl Seeder {
+    pub fn new_optimal_closed_syncmer(k: usize, w: usize) -> Self {
+        assert!(k < 64);
+        assert!(k % 2 != 0);
+
+        let mut t = 0;
+
+        while k >= MIN_S + (t + 1) * w {
+            t += 1;
+        }
+
+        assert!(t > 0);
+
+        let s = k - t * w;
+        let mut mask = 0u64;
+
+        for i in 0..=t {
+            mask |= 1 << (i * w);
+        }
+
+        Self { k, s, t, mask }
+    }
+
+    pub fn new_closed_syncmer(k: usize, w: usize) -> Self {
+        assert!(k < 64);
+        assert!(k % 2 != 0);
+
+        let s = k - w;
+        let mut mask = 0u64;
+
+        for i in 0..=1 {
+            mask |= 1 << (i * w);
+        }
+
+        Self { k, s, t: 1, mask }
+    }
+
     pub fn new_distance_lower_bound(k: usize, reciprocal_density: usize) -> Self {
         assert!(k < 64);
         assert!(k % 2 != 0);
