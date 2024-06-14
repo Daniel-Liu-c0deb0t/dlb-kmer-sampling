@@ -161,13 +161,100 @@ impl Seeder {
     }
 }
 
+pub struct ModMinimizer {
+    pub k: usize,
+    pub w: usize,
+    pub s: usize,
+    pub l: usize,
+}
+
+const MIN_S_MOD: usize = 4;
+
+impl ModMinimizer {
+    pub fn new_original(k: usize, w: usize) -> Self {
+        let l = k + w - 1;
+        let s = MIN_S_MOD + (k - MIN_S_MOD) % w;
+
+        Self { k, w, s, l }
+    }
+
+    pub fn new_dw(k: usize, w: usize) -> Self {
+        let l = k + w - 1;
+
+        let density = |k, w| {
+            let t = (k + w - MIN_S_MOD) / w;
+            ((t + 1) as f64) / ((t * w + 1) as f64)
+        };
+
+        let mut w2 = w;
+        let mut best_w = 0;
+        let mut best_density = std::f64::MAX;
+
+        while w2 > 0 && w2 >= w / 2 {
+            let curr_density = density(k, w2);
+
+            if curr_density < best_density {
+                best_density = curr_density;
+                best_w = w2;
+            }
+
+            w2 -= 1;
+        }
+
+        let best_k = l + 1 - best_w;
+        let s = MIN_S_MOD + (best_k - MIN_S_MOD) % best_w;
+
+        Self { k, w: best_w, s, l }
+    }
+
+    pub fn get_seeds(&self, seq: &[u8], res: &mut Vec<(Vec<u8>, usize)>) {
+        if seq.len() < self.l {
+            return;
+        }
+
+        for (i, win) in seq.windows(self.l).enumerate() {
+            let mut s_min = std::u64::MAX;
+            let mut s_idx = 0;
+
+            for j in 0..=(self.l - self.s) {
+                let s_mer = &win[j..j + self.s];
+                let s_hash = hash_slice(0, s_mer);
+
+                if s_hash <= s_min {
+                    s_min = s_hash;
+                    s_idx = j;
+                }
+            }
+
+            let k_idx = s_idx % self.w;
+            let kmer = win[k_idx..k_idx + self.k].to_vec();
+
+            if let Some(last) = res.last() {
+                let (last_kmer, last_idx) = last;
+
+                if &kmer != last_kmer || i + k_idx != *last_idx {
+                    res.push((kmer, i + k_idx));
+                }
+            } else {
+                res.push((kmer, i + k_idx));
+            }
+        }
+    }
+}
+
 fn hash(seed: u64, kmer: u128) -> u64 {
     let mut h = WyHash::with_seed(seed);
     kmer.hash(&mut h);
     h.finish()
 }
 
-pub fn density(seeds: &[(u128, usize)], seq_len: usize, k: usize) -> f64 {
+fn hash_slice(seed: u64, kmer: &[u8]) -> u64 {
+    let mut h = WyHash::with_seed(seed);
+    kmer.hash(&mut h);
+    h.finish()
+}
+
+pub fn density<T>(seeds: &[(T, usize)], seq_len: usize, k: usize) -> f64 {
     if seq_len < k {
         return 0.0;
     }
