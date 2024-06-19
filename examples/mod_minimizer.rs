@@ -6,8 +6,8 @@ use std::fs::File;
 use std::io::{BufWriter, Write};
 
 fn main() {
-    let w = 31;
-    let ks = (15..200).collect::<Vec<_>>();
+    let w = 24;
+    let ks = (5..200).collect::<Vec<_>>();
 
     let mut density_file = BufWriter::new(File::create("density_mod.csv").unwrap());
 
@@ -42,6 +42,21 @@ fn main() {
         writeln!(
             &mut density_file,
             "Mod minimizer DW,{k},{},{density}",
+            seeder.w,
+        )
+        .unwrap();
+    }
+
+    for &k in &ks {
+        let seeder = SubsampledMinimizer::new(k, w);
+        let mut seeds = Vec::new();
+        seeder.get_seeds(&seq, &mut seeds);
+
+        let density = density(&seeds, seq.len(), k);
+
+        writeln!(
+            &mut density_file,
+            "OpenClosed,{k},{},{density}",
             seeder.w,
         )
         .unwrap();

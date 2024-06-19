@@ -6,7 +6,7 @@ print(df)
 
 algos = df["algorithm"].unique()
 
-w = 31
+w = 24
 
 plt.gcf().set_size_inches(7, 5)
 plt.suptitle(f"w = {w}", fontsize = 14)

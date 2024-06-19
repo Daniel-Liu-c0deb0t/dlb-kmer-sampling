@@ -242,6 +242,77 @@ impl ModMinimizer {
     }
 }
 
+pub struct SubsampledMinimizer {
+    pub l: usize,
+    pub k: usize,
+    pub w: usize,
+    pub s: usize,
+}
+
+const MIN_S_SUB: usize = 3;
+
+impl SubsampledMinimizer {
+    pub fn new(k: usize, w: usize) -> Self {
+        let l = k + w - 1;
+        let s = (k + 1).saturating_sub(w).max(MIN_S_SUB);
+        Self { l, k, w, s }
+    }
+
+    pub fn get_seeds(&self, seq: &[u8], res: &mut Vec<(Vec<u8>, usize)>) {
+        if seq.len() < self.l {
+            return;
+        }
+
+        for (i, win) in seq.windows(self.l).enumerate() {
+            let mut k_min = (10, std::u64::MAX);
+            let mut k_idx = 0;
+
+            for j in 0..self.w {
+                let k_mer = &win[j..j + self.k];
+                let mut s_min = std::u64::MAX;
+                let mut s_idx = 0;
+
+                for k in 0..=(self.k - self.s) {
+                    let s_mer = &k_mer[k..k + self.s];
+                    let s_hash = hash_slice(0, s_mer);
+
+                    if s_hash <= s_min {
+                        s_min = s_hash;
+                        s_idx = k;
+                    }
+                }
+
+                let mut k_hash = k_min;
+
+                if s_idx == (self.k - self.s + 1) / 2 {
+                    k_hash = (0, hash_slice(0, k_mer));
+                }
+
+                if s_idx == 0 || s_idx == self.k - self.s {
+                    k_hash = (1, hash_slice(0, k_mer));
+                }
+
+                if k_hash < k_min {
+                    k_min = k_hash;
+                    k_idx = j;
+                }
+            }
+
+            let kmer = win[k_idx..k_idx + self.k].to_vec();
+
+            if let Some(last) = res.last() {
+                let (last_kmer, last_idx) = last;
+
+                if &kmer != last_kmer || i + k_idx != *last_idx {
+                    res.push((kmer, i + k_idx));
+                }
+            } else {
+                res.push((kmer, i + k_idx));
+            }
+        }
+    }
+}
+
 fn hash(seed: u64, kmer: u128) -> u64 {
     let mut h = WyHash::with_seed(seed);
     kmer.hash(&mut h);
